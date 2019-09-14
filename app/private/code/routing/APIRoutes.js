@@ -22,7 +22,10 @@ class APIRoutes {
 
         this.expressApp.get("/api/friends", (request, response) => {
 
-            response.json(this.friendsDatabase.getAllFriendsJSON());
+            this.friendsDatabase.getAllFriendsJSON().then((jsonData) => {
+               
+                response.json(jsonData); 
+            });
         });
     }
 }

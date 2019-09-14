@@ -13,35 +13,10 @@ class FriendsDatabase {
         this.isWriteLocked = false;
         this.writeQueue = [];
 
-        this.seedDatabase();
+        this.PRIVATE_seedDatabase();
     }
 
     static get failedToAddNewFriend() { return "Failed to add new friend ► "; }
-
-    seedDatabase() {
-
-        const promises = [];
-
-        const seedData =
-            [
-                { name: "jeremy", photoURL: "photo1", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                { name: "katie", photoURL: "photo2", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                { name: "K.N.J.R.", photoURL: "photo3", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                { name: "Kerby", photoURL: "photo4", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
-            ];
-
-        for (const friend of seedData) {
-
-            const promise = this.addFriend(friend.name, friend.photoURL, friend.scores);
-
-            promises.push(promise);
-        }
-
-        Promise.all(promises).catch((error) => {
-
-            terminal.red(`  ${error.message}`).gray(`${error.reason}\n\n`);
-        });
-    }
 
     addFriend(name, photoURL, scores) {
 
@@ -70,6 +45,48 @@ class FriendsDatabase {
         });
     }
 
+    getAllFriendsJSON() {
+
+        return new Promise((resolve, reject) => {
+           
+            const databaseCopy = [];
+
+            this.database.forEach(friend => databaseCopy.push(friend));
+    
+            resolve(databaseCopy);  //temporarily uses extra memory, but protects the internal database (this.database) from external modification.
+        });
+    }
+
+    getFriendMatch() {
+
+
+    }
+
+    PRIVATE_seedDatabase() {
+
+        const promises = [];
+
+        const seedData =
+            [
+                { name: "jeremy", photoURL: "photo1", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                { name: "katie", photoURL: "photo2", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                { name: "K.N.J.R.", photoURL: "photo3", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                { name: "Kerby", photoURL: "photo4", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
+            ];
+
+        for (const friend of seedData) {
+
+            const promise = this.addFriend(friend.name, friend.photoURL, friend.scores);
+
+            promises.push(promise);
+        }
+
+        Promise.all(promises).catch((error) => {
+
+            terminal.red(`  ${error.message}`).gray(`${error.reason}\n\n`);
+        });
+    }
+
     PRIVATE_pushNewFriend(newFriend) {
 
         //Write lock simulates auto-incrementing integrity (it should now be thread-safe)
@@ -81,7 +98,7 @@ class FriendsDatabase {
 
             this.database.push(newFriend);
             
-            this.printNewFriend(newFriend);
+            this.PRIVATE_printNewFriend(newFriend);
 
             if (this.writeQueue.length > 0) {
 
@@ -110,7 +127,7 @@ class FriendsDatabase {
         }
     }
 
-    printNewFriend(friend) {
+    PRIVATE_printNewFriend(friend) {
 
         setTimeout(() => {
 
@@ -121,20 +138,6 @@ class FriendsDatabase {
             terminal.white("  scores → ").gray(`[${friend.scores}]\n\n`);
 
         }, 0); //move to end of event loop, allow header to finish printing
-    }
-
-    getAllFriendsJSON() {
-
-        const databaseCopy = [];
-
-        this.database.forEach(friend => databaseCopy.push(friend));
-
-        return databaseCopy;  //uses extra memory, but protects the database from external modification!
-    }
-
-    getFriendMatch() {
-
-
     }
 }
 
