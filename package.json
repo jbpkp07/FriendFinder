@@ -1,0 +1,20 @@
+{
+  "name": "friendfinder",
+  "version": "1.0.0",
+  "description": "A fun web application that helps visitors find friends with similar personality traits.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbpkp07/FriendFinder.git"
+  },
+  "author": "Jeremy Barnes",
+  "license": "ISC",
+  "homepage": "https://github.com/jbpkp07/FriendFinder#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "terminal-kit": "^1.31.3"
+  }
+}
