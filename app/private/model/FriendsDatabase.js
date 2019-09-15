@@ -6,19 +6,24 @@ const terminal = require('terminal-kit').terminal;
 
 class FriendsDatabase {
 
-    constructor() {
+    constructor(config) {
 
         this.database = [];
 
         this.isWriteLocked = false;
         this.writeQueue = [];
 
-        this.PRIVATE_seedDatabase();
+        this.PRIVATE_seedDatabase(config);
     }
 
     static get failedToAddNewFriend() { return "Failed to add new friend ► "; }
 
     addFriend(name, photoURL, scores) {
+
+        if (Array.isArray(scores)) {
+
+            scores = scores.map(score => parseInt(score));  //convert all values to integers
+        }
 
         return new Promise((resolve, reject) => {
 
@@ -47,7 +52,7 @@ class FriendsDatabase {
 
     getAllFriendsJSON() {
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
            
             const databaseCopy = [];
 
@@ -57,22 +62,60 @@ class FriendsDatabase {
         });
     }
 
-    getFriendMatch() {
+    getFriendMatch(newFriend) {
 
+        return new Promise((resolve) => {
 
+            const bestFriendMatch = this.PRIVATE_findBestFriendMatch(newFriend);
+
+            resolve(bestFriendMatch);
+        });
     }
 
-    PRIVATE_seedDatabase() {
+    PRIVATE_findBestFriendMatch(newFriend) {
+
+        let bestFriendMatch;
+
+        let lowestDiff = newFriend.scores.length * 4;  //initialized to worst possible match (40)
+
+        for (const friend of this.database) {
+
+            let diff = 0;
+
+            if (friend.id !== newFriend.id) {  //don't compare new friend to itself
+
+                for (let i = 0; i < friend.scores.length; i++) {
+
+                    diff += Math.abs(friend.scores[i] - newFriend.scores[i]);
+
+                    if (lowestDiff < diff) {
+
+                        break;  //No need to continue, not going to be the best match
+                    }
+                }
+
+                if (lowestDiff >= diff) {
+
+                    lowestDiff = diff;
+                    
+                    bestFriendMatch = friend;
+
+                    if (lowestDiff === 0) {
+
+                        break;  //best possible match already found
+                    }
+                }
+            } 
+        }
+
+        return bestFriendMatch;
+    }
+
+    PRIVATE_seedDatabase(config) {
+
+        const seedData = require(config.friendsDatabaseSeedPath);
 
         const promises = [];
-
-        const seedData =
-            [
-                { name: "jeremy", photoURL: "photo1", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                { name: "katie", photoURL: "photo2", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                { name: "K.N.J.R.", photoURL: "photo3", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                { name: "Kerby", photoURL: "photo4", scores: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
-            ];
 
         for (const friend of seedData) {
 
@@ -89,7 +132,7 @@ class FriendsDatabase {
 
     PRIVATE_pushNewFriend(newFriend) {
 
-        //Write lock simulates auto-incrementing integrity (it should now be thread-safe)
+        //Write lock simulates auto-incrementing integrity (it should now be thread-safe... even though this app is single-threaded!)
         if (!this.isWriteLocked) {
 
             this.isWriteLocked = true;
@@ -179,6 +222,14 @@ class Friend {
 
                 this.validationErrorMSG = `Bad value: \'scores\' array contains a value that is not a number:  '${score}'`;
                 return;
+            }
+            else {
+
+                if (score < 1 || score > 5) {
+
+                    this.validationErrorMSG = `Bad value: \'scores\' array contains a number not between [1 <-> 5]:  '${score}'`;
+                    return;
+                }
             }
         }
 

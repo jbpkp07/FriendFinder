@@ -1,18 +1,21 @@
 "use strict";
 /* global require, __dirname, module */
 
+const express = require("express");
+
 
 class HTMLRoutes {
 
-    constructor(expressApp, config) {
-        
-        this.expressApp = expressApp;
+    constructor(config) {
+
         this.config = config;
 
-        this.startListeners();
+        this.router = express.Router();
+
+        this.assignRouteListeners();
     }
 
-    startListeners() {
+    assignRouteListeners() {
 
         this.getHomePage();
 
@@ -21,7 +24,7 @@ class HTMLRoutes {
 
     getHomePage() {
 
-        this.expressApp.get("/", (request, response) => {
+        this.router.get("/", (request, response) => {
 
             response.sendFile(this.config.homeHTMLPath);
         });
@@ -29,7 +32,7 @@ class HTMLRoutes {
 
     getSurveyPage() {
 
-        this.expressApp.get("/survey", (request, response) => {
+        this.router.get("/survey", (request, response) => {
 
             response.sendFile(this.config.surveyHTMLPath);
         });

@@ -11,12 +11,14 @@ function getFullPath(relativePath) {
 
 const config =
 {
-    printHeaderFunctionsPath: getFullPath('./app/private/code/functions/printHeaderFunctions.js'),
-    friendsDatabasePath:      getFullPath('./app/private/data/FriendsDatabase.js'),
-    htmlRoutesPath:           getFullPath('./app/private/code/routing/HTMLRoutes.js'),
-    apiRoutesPath:            getFullPath('./app/private/code/routing/APIRoutes.js'),
-    homeHTMLPath:             getFullPath('./app/public/home.html'),
-    surveyHTMLPath:           getFullPath('./app/public/survey.html')
+    friendsDatabasePath:      getFullPath('./app/private/model/FriendsDatabase.js'),
+    friendsDatabaseSeedPath:  getFullPath('./app/private/model/seed.js'),
+    printHeaderFunctionsPath: getFullPath('./app/private/controller/functions/printHeaderFunctions.js'),
+    htmlRoutesPath:           getFullPath('./app/private/controller/routing/HTMLRoutes.js'),
+    apiRoutesPath:            getFullPath('./app/private/controller/routing/APIRoutes.js'),
+    publicAssetsPath:         getFullPath('./app/public'),
+    homeHTMLPath:             getFullPath('./app/public/html/home.html'),
+    surveyHTMLPath:           getFullPath('./app/public/html/survey.html')
 };
 
 

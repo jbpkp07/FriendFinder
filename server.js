@@ -11,18 +11,19 @@ const FriendsDatabase = require(config.friendsDatabasePath);
 const HTMLroutes = require(config.htmlRoutesPath);
 const APIRoutes = require(config.apiRoutesPath);
 
-const friendsDatabase = new FriendsDatabase();
-
 const app = express();
 
+app.use(express.static(config.publicAssetsPath));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const htmlRoutes = new HTMLroutes(app, config);
-const apiroutes  = new APIRoutes(app, config, friendsDatabase);
+const friendsDatabase = new FriendsDatabase(config);
 
+const htmlRoutes = new HTMLroutes(config);
+const apiRoutes  = new APIRoutes(config, friendsDatabase);
 
-
+app.use(htmlRoutes.router);
+app.use(apiRoutes.router);
 
 app.listen(port, () => {
 

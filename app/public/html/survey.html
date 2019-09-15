@@ -258,6 +258,8 @@
 
                 // AJAX post the data to the friends API.
                 $.post("/api/friends", userData, function (data) {
+    
+                    console.log(`Friend Match...\n   name  : ${data.name}\n   photo : ${data.photo}\n   scores: [${data.scores}]\n\n`);
 
                     // Grab the result from the AJAX post so that the best match's name and photo are displayed.
                     $("#match-name").text(data.name);
@@ -266,6 +268,9 @@
                     // Show the modal with the best match
                     $("#results-modal").modal("toggle");
 
+                }).fail((error) => {
+         
+                    console.log(`${error.responseJSON.message}  ${error.responseJSON.reason}\n\n`);
                 });
             } else {
                 alert("Please fill out all fields before submitting!");
