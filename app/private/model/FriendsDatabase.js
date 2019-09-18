@@ -20,22 +20,30 @@ class FriendsDatabase {
 
     addFriend(name, photoURL, scores) {
 
-        if (Array.isArray(scores)) {
-
-            scores = scores.map(score => parseInt(score));  //convert all values to integers
-        }
-
         return new Promise((resolve, reject) => {
 
             const newFriend = new Friend(name, photoURL, scores);
 
             if (newFriend.isValid) {
 
-                newFriend.minimizeThisObject();
+                if (!this.PRIVATE_doesFriendAlreadyExist(newFriend)) {
 
-                this.PRIVATE_pushNewFriend(newFriend);
+                    newFriend.minimizeThisObject();
 
-                resolve(newFriend);
+                    this.PRIVATE_pushNewFriend(newFriend);
+    
+                    resolve(newFriend);
+                }
+                else {  //we are trying to add a duplicate friend entry...
+
+                    const error =
+                    {
+                        message: FriendsDatabase.failedToAddNewFriend,
+                        reason: "Friend already exists in database"
+                    };
+    
+                    reject(error);
+                }
             }
             else {
 
@@ -53,11 +61,11 @@ class FriendsDatabase {
     getAllFriendsJSON() {
 
         return new Promise((resolve) => {
-           
+   
             const databaseCopy = [];
 
             this.database.forEach(friend => databaseCopy.push(friend));
-    
+
             resolve(databaseCopy);  //temporarily uses extra memory, but protects the internal database (this.database) from external modification.
         });
     }
@@ -68,7 +76,11 @@ class FriendsDatabase {
 
             const bestFriendMatch = this.PRIVATE_findBestFriendMatch(newFriend);
 
-            resolve(bestFriendMatch);
+            const bestFriendMatchCopy = new Friend(bestFriendMatch.name, bestFriendMatch.photo, bestFriendMatch.scores);
+
+            bestFriendMatchCopy.id = bestFriendMatch.id;
+
+            resolve(bestFriendMatchCopy);  //temporarily uses extra memory, but protects the datbase's friend object from external modification.
         });
     }
 
@@ -97,7 +109,7 @@ class FriendsDatabase {
                 if (lowestDiff >= diff) {
 
                     lowestDiff = diff;
-                    
+
                     bestFriendMatch = friend;
 
                     if (lowestDiff === 0) {
@@ -105,7 +117,7 @@ class FriendsDatabase {
                         break;  //best possible match already found
                     }
                 }
-            } 
+            }
         }
 
         return bestFriendMatch;
@@ -130,6 +142,42 @@ class FriendsDatabase {
         });
     }
 
+    PRIVATE_doesFriendAlreadyExist(newFriend) {
+
+        for (const friend of this.database) {
+
+            if (!this.PRIVATE_areFriendsUnique(friend, newFriend)) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    PRIVATE_areFriendsUnique(friend1, friend2) {
+
+        let areScoresTheSame = true;
+
+        //compare survey results
+        for (let i = 0; i < friend1.scores.length; i++) {
+
+            if (friend1.scores[i] !== friend2.scores[i]) {
+
+                areScoresTheSame = false;
+            }
+        }
+
+        if (friend1.name.toLowerCase() === friend2.name.toLowerCase() &&
+            friend1.photo.toLowerCase() === friend2.photo.toLowerCase() &&
+            areScoresTheSame) {
+
+            return false;  //same names, same photos, and same scores; friends are NOT unique
+        }
+
+        return true;
+    }
+
     PRIVATE_pushNewFriend(newFriend) {
 
         //Write lock simulates auto-incrementing integrity (it should now be thread-safe... even though this app is single-threaded!)
@@ -137,15 +185,24 @@ class FriendsDatabase {
 
             this.isWriteLocked = true;
 
-            newFriend.id = this.database.length + 1;
+            if (this.database.length > 0) {
+
+                newFriend.id = this.database[this.database.length - 1].id + 1;  //assign incremental id (last-friend-entered's id + 1)
+            }
+            else {
+
+                newFriend.id = 1;
+            }
 
             this.database.push(newFriend);
-            
+
             this.PRIVATE_printNewFriend(newFriend);
 
             if (this.writeQueue.length > 0) {
 
                 const waitingFriend = this.writeQueue.shift();
+
+                terminal.white("  Database write queue length → ").brightGreen(`${this.writeQueue.length}\n\n`);
 
                 this.isWriteLocked = false;
 
@@ -160,10 +217,10 @@ class FriendsDatabase {
 
             this.writeQueue.push(newFriend);
 
-            const length = this.writeQueue.length;
+            const length = this.writeQueue.length;  //capture length at this moment in time
 
             setTimeout(() => {
-                
+
                 terminal.white("  Database write queue length → ").brightGreen(`${length}\n\n`);
 
             }, 0);  //move to end of event loop, allow header to finish printing
@@ -216,6 +273,8 @@ class Friend {
             return;
         }
 
+        scores = scores.map(score => parseInt(score));  //convert all values to integers
+
         for (const score of scores) {
 
             if (typeof score !== 'number') {
@@ -234,8 +293,8 @@ class Friend {
         }
 
         this.id = null;
-        this.name = name;
-        this.photo = photoURL;
+        this.name = name.trim();
+        this.photo = photoURL.trim();
         this.scores = scores;
 
         this.isValid = true;

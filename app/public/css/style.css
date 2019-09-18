@@ -1,0 +1,226 @@
+:root {
+    --light-white: rgba(248,248,248,1.0);
+    --medium-white: rgba(232,232,232,1.0);
+    --dark-white: rgba(192,192,192,1.0);
+    --dark-white-invisible: rgba(192,192,192,0.3);;
+    --dark-white-transparent: rgba(192,192,192,0.9);
+
+    --lighter-gray-invisible: rgba(64,64,64,0.0);
+    --lighter-gray-transparent: rgba(64,64,64,0.2);
+    --lighter-gray: rgba(72,72,72,1.0);
+    --light-gray: rgba(48,48,48,1.0);
+    --medium-gray: rgba(32,32,32,1.0);
+    --dark-gray: rgba(18,18,18,1.0);
+
+    --light-blue: rgba(0,174,239,1.0);
+    --medium-blue: rgba(30,145,255,1.0);
+}
+
+@font-face {
+    font-family: 'Roboto-Regular';
+    src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+/* * {
+    -webkit-user-select: none;
+} */
+
+html {
+    height: 100%;
+}
+
+body {
+    background: var(--dark-gray);
+    color: var(--medium-gray);
+    font-family: 'Roboto-Regular', sans-serif;
+    font-size: 12pt;
+    font-weight: 600;
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    /* overflow-y: hidden; */
+    /* overflow-y: scroll; */
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+.select {
+    -webkit-user-select: text;
+}
+
+.btn {
+    border-radius: 10px;
+    color: var(--medium-gray);
+    font-family: 'Roboto-Regular', sans-serif;
+    font-size: 12pt;
+    font-weight: 900;
+    opacity: 0.75;
+    outline: none;
+    padding: 10px;
+    width: fit-content;
+}
+
+.btn:hover {
+    opacity: 1.0;
+}
+
+.blur {
+    filter: blur(18px);
+    transition: all 1000ms ease-out;
+}
+
+.focus {
+    filter: blur(0px);
+    transition: all 1000ms ease-out;
+}
+
+.hidden {
+    display: none;
+}
+
+.formInput {
+    background: var(--lighter-gray);
+    border: 3px solid var(--medium-blue);
+    border-radius: 5px;
+    box-shadow: none;
+    color: var(--light-white);
+    font-size: 12pt;
+    height: 28px;
+    outline: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-decoration: none;
+    width: 320px;
+}
+
+.dropdownInput {
+    height: 36px;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin-bottom: 15px;
+    width: 720px;
+}
+
+::placeholder {
+    color: var(--dark-white-transparent);
+}
+
+#backgroundIMG {
+    background-attachment: fixed;
+    background-image: url(../images/friends.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+
+#screenWrapper {
+    display: flex;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+#screen {
+    background: var(--dark-white-invisible);
+    border: 2px solid var(--lighter-gray-invisible);
+    border-radius: 25px;
+    margin: auto;
+    text-align: center;
+    transition: all 500ms ease-out;
+}
+
+#screen:hover {
+    background: var(--dark-white-transparent);
+    border: 2px solid var(--lighter-gray-transparent);
+    transition: all 500ms ease-out;
+}
+
+.screenCollapsed {
+    height: 400px;
+    transition: all 500ms ease-out;
+    width: 640px;
+}
+
+.screenExpanded {
+    height: 95%;
+    transition: all 500ms ease-out;
+    width: 768px;
+}
+
+#titleText {
+    background: var(--lighter-gray);
+    border: 5px solid var(--light-blue);
+    border-radius: 10px;
+    color: var(--light-blue);
+    display: inline-block;
+    font-size: 52pt;
+    font-weight: 900;
+    margin-top: 75px;
+    padding: 10px 18px 10px 10px;
+    text-shadow: 8px 0 var(--dark-gray);
+}
+
+#description {
+    font-size: 18pt;
+    margin-top: 15px;
+}
+
+#startSurvey {
+    background: var(--light-blue);
+    border: 3px solid var(--lighter-gray);
+    margin: 100px auto auto auto;
+}
+
+#surveyText {
+    font-size: 18pt;
+    font-weight: 900;
+    margin-top: 10px;
+}
+
+#name {
+    margin: 10px 12px 5px 0px;
+}
+
+#photo {
+    margin: 10px 0px 5px 12px;
+}
+
+hr {
+    margin-bottom: 15px;
+}
+
+#submitSurveyBTN {
+    background: var(--medium-blue);
+    border: 3px solid var(--lighter-gray);
+    margin: 0 auto;
+}
+
+#friendMatchModal {
+    background: var(--dark-white);
+    border: 3px solid var(--lighter-gray);
+    height: 640px;
+    max-width: 480px;
+    padding: 17px;
+    width: 480px;
+}
+
+.modal a.close-modal {
+    background-image: url("../images/modalCloseIcon.png");
+}
+
+#matchName {
+    font-size: 18pt;
+    margin-top: 10px;
+}
+
+#matchPhoto {
+    border: 3px solid var(--medium-blue);
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    height: 70%;
+    object-fit: cover;
+    width: 99%;
+}
