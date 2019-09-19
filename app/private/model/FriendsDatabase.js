@@ -79,6 +79,8 @@ class FriendsDatabase {
             const bestFriendMatchCopy = new Friend(bestFriendMatch.name, bestFriendMatch.photo, bestFriendMatch.scores);
 
             bestFriendMatchCopy.id = bestFriendMatch.id;
+            
+            bestFriendMatchCopy.percentageMatch = bestFriendMatch.percentageMatch;
 
             resolve(bestFriendMatchCopy);  //temporarily uses extra memory, but protects the datbase's friend object from external modification.
         });
@@ -88,7 +90,9 @@ class FriendsDatabase {
 
         let bestFriendMatch;
 
-        let lowestDiff = newFriend.scores.length * 4;  //initialized to worst possible match (40)
+        const maxDiff = newFriend.scores.length * 4;
+
+        let lowestDiff = maxDiff;  //initialized to worst possible match (40)
 
         for (const friend of this.database) {
 
@@ -119,6 +123,10 @@ class FriendsDatabase {
                 }
             }
         }
+
+        const percentageMatch = ((1 - (lowestDiff / maxDiff)) * 100).toFixed(0) + "%";
+
+        bestFriendMatch.percentageMatch = percentageMatch;
 
         return bestFriendMatch;
     }

@@ -1,6 +1,7 @@
 "use strict";
 /* global surveyQuestions, surveyOptions */
 
+
 class ViewController {
 
     constructor() {
@@ -16,6 +17,7 @@ class ViewController {
         this.friendMatchModalElement = $("#friendMatchModal");
         this.matchNameElement = $("#matchName");
         this.matchPhotoElement = $("#matchPhoto");
+        this.percentageMatchElement = $("#percentageMatch");
 
         this.selectElements = [];
 
@@ -103,7 +105,7 @@ class ViewController {
             scores.push(score);
         }
 
-        if (this.isInputValid(name, photo, scores)) {
+        if (this.isInputValid(name, photo, scores, event)) {
 
             event.preventDefault();
 
@@ -116,14 +118,14 @@ class ViewController {
 
             $.post("/api/friends", newFriend, (friendMatch) => {
 
-                console.log(`Friend Match...\n   id    : ${friendMatch.id}\n   name  : ${friendMatch.name}\n   photo : ${friendMatch.photo}\n   scores: [${friendMatch.scores}]\n\n`);
+                console.log(`Friend Match...\n   id    : ${friendMatch.id}\n   name  : ${friendMatch.name}\n   photo : ${friendMatch.photo}\n   scores: [${friendMatch.scores}]\n   match%: ${friendMatch.percentageMatch}\n\n`);
 
-               this.showFriendMatchModal(friendMatch.name, friendMatch.photo);
+                this.showFriendMatchModal(friendMatch.name, friendMatch.photo, friendMatch.percentageMatch);
 
             }).fail((error) => {
 
                 console.log(`${error.responseJSON.message}  ${error.responseJSON.reason}\n\n`);
-                
+
                 alert(`${error.responseJSON.message}  ${error.responseJSON.reason}\n\n`);
 
             }).always(() => {
@@ -133,7 +135,7 @@ class ViewController {
         }
     }
 
-    isInputValid(name, photo, scores) {
+    isInputValid(name, photo, scores, event) {
 
         if (typeof name !== 'string' || name.length === 0) {
 
@@ -144,6 +146,28 @@ class ViewController {
 
             return false;
         }
+
+        var urlPattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+        if (!urlPattern.test(photo)) {
+
+            event.preventDefault();
+
+            alert("Photo URL is not valid!");
+
+            return false;
+        }
+
+        $.get(photo).fail(() => {
+
+            event.preventDefault();
+
+            console.clear();
+
+            alert("Photo URL is not valid!");
+
+            return false;
+        });
 
         if (!Array.isArray(scores) || scores.length !== surveyQuestions.length) {
 
@@ -173,18 +197,30 @@ class ViewController {
         }
     }
 
-    showFriendMatchModal(name, photo, matchPercentage) {
+    showFriendMatchModal(name, photo, percentageMatch) {
 
         this.matchNameElement.text(name);
 
         this.matchPhotoElement.attr("src", photo);
 
-        const modalOptions = 
+        this.percentageMatchElement.text(percentageMatch);
+
+        const modalOptions =
         {
             fadeDuration: 1000,
             fadeDelay: 0.50
         };
 
-        this.friendMatchModalElement.modal(modalOptions);
+        this.friendMatchModalElement.modal(modalOptions).promise().then(() => {
+
+            setTimeout(() => {
+
+                $(".close-modal").one("click", () => {
+
+                    location.reload();
+                });
+
+            }, 1000);
+        });
     }
 } 

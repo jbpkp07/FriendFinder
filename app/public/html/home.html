@@ -23,12 +23,17 @@
 <body>
 
     <div id="backgroundIMG" class="blur"> </div>
+    
     <div id="screenWrapper">
         <div id="screen" class="screenCollapsed">
-            <div id="welcomeScreen" class="screenCollapsed">
+            <div id="welcomeScreen">
                 <span id=titleText>Friend Finder</span>
                 <div id="description">Match with friends.</div>
                 <div id="startSurvey" class="btn">start survey</div>
+                <div id="links">
+                    <a id="apiLink" href="/api/friends" class="btn">Friend Finder API</a>
+                    <a id="githubLink" href="https://github.com/jbpkp07/FriendFinder" class="btn">GitHub Repo</a>
+                </div>
             </div>
             <div id="surveyScreen" class="hidden">
                 <div id="surveyText">Survey Questions</div>
@@ -42,14 +47,18 @@
                     <button id="submitSurveyBTN" class="btn" type="submit">submit</button>
                 </form>
                 <div id="friendMatchModal" class="modal">
+                    <span>Friend match:</span>
                     <div id="matchName"></div>
                     <hr>
-                    <image id="matchPhoto" src=""></image>
+                    <image id="matchPhoto"></image>
+                    <hr>
+                    <span>Personality match:</span>
+                    <div id="percentageMatch"></div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script>
         $(document).ready(() => {
 
@@ -58,11 +67,6 @@
         });
     </script>
 
-    <!-- <footer class="footer">
-            <div class="container">
-                <p><a href="/api/friends">API Friends List</a> | <a href="https://github.com/afhaque/friendfinder">GitHub Repo</a></p>
-            </div>
-        </footer> -->
 </body>
 
 </html>
