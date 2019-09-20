@@ -76,13 +76,7 @@ class FriendsDatabase {
 
             const bestFriendMatch = this.PRIVATE_findBestFriendMatch(newFriend);
 
-            const bestFriendMatchCopy = new Friend(bestFriendMatch.name, bestFriendMatch.photo, bestFriendMatch.scores);
-
-            bestFriendMatchCopy.id = bestFriendMatch.id;
-            
-            bestFriendMatchCopy.percentageMatch = bestFriendMatch.percentageMatch;
-
-            resolve(bestFriendMatchCopy);  //temporarily uses extra memory, but protects the datbase's friend object from external modification.
+            resolve(bestFriendMatch);  //temporarily uses extra memory, but protects the datbase's friend object from external modification.
         });
     }
 
@@ -121,9 +115,13 @@ class FriendsDatabase {
 
         const percentageMatch = ((1 - (lowestDiff / maxDiff)) * 100).toFixed(0) + "%";
 
-        bestFriendMatch.percentageMatch = percentageMatch;
+        const bestFriendMatchCopy = new Friend(bestFriendMatch.name, bestFriendMatch.photo, bestFriendMatch.scores);
 
-        return bestFriendMatch;
+        bestFriendMatchCopy.id = bestFriendMatch.id;
+        
+        bestFriendMatchCopy.percentageMatch = percentageMatch;
+
+        return bestFriendMatchCopy;
     }
 
     PRIVATE_seedDatabase(config) {
