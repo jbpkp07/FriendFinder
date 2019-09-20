@@ -23,6 +23,7 @@
 
 html {
     height: 100%;
+    cursor: default;
 }
 
 body {
@@ -43,6 +44,7 @@ body {
 .btn {
     border-radius: 10px;
     color: var(--medium-gray);
+    cursor: pointer;
     font-family: 'Roboto-Regular', sans-serif;
     font-size: 12pt;
     font-weight: 900;
@@ -200,6 +202,7 @@ hr {
 
 .modal a.close-modal {
     background-image: url("../images/modalCloseIcon.png");
+    cursor: pointer;
 }
 
 #matchName {
