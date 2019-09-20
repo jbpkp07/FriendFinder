@@ -137,7 +137,6 @@ body {
 }
 
 #welcomeScreen {
-
     height: 400px;
     width: 640px;
 }
@@ -160,7 +159,7 @@ body {
     margin-top: 15px;
 }
 
-#startSurvey {
+#startSurveyBTN {
     background: var(--light-blue);
     border: 3px solid var(--lighter-gray);
     margin: 100px auto auto auto;
@@ -228,10 +227,6 @@ hr {
     margin-top: 10px;
 }
 
-#links {
-    margin-top: 80px;
-}
-
 #links > a {
     color: var(--light-blue);
     text-decoration: none;
@@ -243,13 +238,13 @@ hr {
 }
 
 #apiLink {
-    background: var(--dark-white-invisible);
     float: left;
     font-weight: 900;
+    margin-left: 15px;
 }
 
 #githubLink {
-    background: var(--dark-white-invisible);
     float: right;
     font-weight: 900;
+    margin-right: 15px;
 }

@@ -110,16 +110,11 @@ class FriendsDatabase {
                     }
                 }
 
-                if (lowestDiff >= diff) {
+                if (lowestDiff >= diff) {  // '>=' promotes most recent added friend to be chosen for identical match diffs
 
                     lowestDiff = diff;
 
                     bestFriendMatch = friend;
-
-                    if (lowestDiff === 0) {
-
-                        break;  //best possible match already found
-                    }
                 }
             }
         }

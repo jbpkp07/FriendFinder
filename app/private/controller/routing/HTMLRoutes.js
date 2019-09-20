@@ -18,23 +18,13 @@ class HTMLRoutes {
     assignRouteListeners() {
 
         this.getHomePage();
-
-        this.getSurveyPage();
     }
 
-    getHomePage() {
+    getHomePage() {  //Single page web app, this is the only page needed!
 
         this.router.get("/", (request, response) => {
 
             response.sendFile(this.config.homeHTMLPath);
-        });
-    }
-
-    getSurveyPage() {
-
-        this.router.get("/survey", (request, response) => {
-
-            response.sendFile(this.config.surveyHTMLPath);
         });
     }
 }

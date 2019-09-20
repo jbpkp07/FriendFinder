@@ -17,8 +17,7 @@ const config =
     htmlRoutesPath:           getFullPath('./app/private/controller/routing/HTMLRoutes.js'),
     apiRoutesPath:            getFullPath('./app/private/controller/routing/APIRoutes.js'),
     publicAssetsPath:         getFullPath('./app/public'),
-    homeHTMLPath:             getFullPath('./app/public/html/home.html'),
-    surveyHTMLPath:           getFullPath('./app/public/html/survey.html')
+    homeHTMLPath:             getFullPath('./app/public/html/home.html')
 };
 
 

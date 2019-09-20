@@ -9,6 +9,7 @@ class ViewController {
         this.backgroundIMGElement = $("#backgroundIMG");
         this.screenElement = $("#screen");
         this.welcomeScreenElement = $("#welcomeScreen");
+        this.startSurveyBTNElement = $("#startSurveyBTN");
         this.surveyScreenElement = $("#surveyScreen");
         this.nameInputElement = $("#name");
         this.photoInputElement = $("#photo");
@@ -57,7 +58,7 @@ class ViewController {
 
     assignListeners() {
 
-        this.welcomeScreenElement.one("click", () => {
+        this.startSurveyBTNElement.one("click", () => {
 
             this.startSurvey();
         });
@@ -105,7 +106,7 @@ class ViewController {
             scores.push(score);
         }
 
-        if (this.isInputValid(name, photo, scores, event)) {
+        if (this.isInputValid(name, photo, scores)) {
 
             event.preventDefault();
 
@@ -122,20 +123,19 @@ class ViewController {
 
                 this.showFriendMatchModal(friendMatch.name, friendMatch.photo, friendMatch.percentageMatch);
 
+                this.clearInputFields();
+
             }).fail((error) => {
 
                 console.log(`${error.responseJSON.message}  ${error.responseJSON.reason}\n\n`);
 
                 alert(`${error.responseJSON.message}  ${error.responseJSON.reason}\n\n`);
 
-            }).always(() => {
-
-                this.clearInputFields();
             });
         }
     }
 
-    isInputValid(name, photo, scores, event) {
+    isInputValid(name, photo, scores) {
 
         if (typeof name !== 'string' || name.length === 0) {
 
@@ -146,28 +146,6 @@ class ViewController {
 
             return false;
         }
-
-        var urlPattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-
-        if (!urlPattern.test(photo)) {
-
-            event.preventDefault();
-
-            alert("Photo URL is not valid!");
-
-            return false;
-        }
-
-        $.get(photo).fail(() => {
-
-            event.preventDefault();
-
-            console.clear();
-
-            alert("Photo URL is not valid!");
-
-            return false;
-        });
 
         if (!Array.isArray(scores) || scores.length !== surveyQuestions.length) {
 
