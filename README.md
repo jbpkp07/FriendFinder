@@ -42,3 +42,5 @@ I am the sole developer of this application.
 ![2](https://github.com/jbpkp07/FriendFinder/blob/master/app/public/images/websiteScreenshot1.png)
 
 ![3](https://github.com/jbpkp07/FriendFinder/blob/master/app/public/images/websiteScreenshot2.png)
+
+![4](https://github.com/jbpkp07/FriendFinder/blob/master/app/public/images/websiteScreenshot3.png)
