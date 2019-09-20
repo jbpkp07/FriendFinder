@@ -2,12 +2,12 @@
 
 This is a webserver application that hosts a client web page that provides a simulated experience for matching with friends based on personality metrics.
 
-## Deployed website:
+### Deployed website:
 
 https://jbpkp07-friendfinder.herokuapp.com
 
 
-## Run it locally:
+### Run it locally:
 
 You can clone this repository via command line (if you have Git installed) by typing:  
 
@@ -31,7 +31,7 @@ There is also strict validation for the survey question answers, with appropriat
 I am the sole developer of this application.
 
 
-## Screenshots:
+### Screenshots:
 
 #### Locally running webserver:
 
